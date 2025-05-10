@@ -239,7 +239,8 @@ if [ -f '/home/$USER/google-cloud-sdk/path.zsh.inc' ]; then . '/home/$USER/googl
 if [ -f '/home/$USER/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/$USER/google-cloud-sdk/completion.zsh.inc'; fi
 
 [ -d /home/$USER/.local/bin ] && export PATH="/home/$USER/.local/bin:$PATH"
-[ -f /home/$USER/.local/bin/myfunc.sh ] && source /home/$USER/.local/bin/local.sh
+[ -f /home/$USER/.local/bin/local.sh ] && source /home/$USER/.local/bin/local.sh
+[ -f /home/$USER/.local/bin/myfunc.sh ] && source /home/$USER/.local/bin/myfunc.sh
 [ -f /home/$USER/.local/bin/env.sh ] && source /home/$USER/.local/bin/env.sh
 
 #need?
