@@ -7,7 +7,6 @@ alias createPassword='pwgen -1 16 10;pwgen -1 -s -y 16 10'
 alias mydate='date +"%Y-%m%d-%H%M%S"'
 alias gip='curl inet-ip.info'
 alias delete1m="find . -maxdepth 1 -mtime +30|xargs rm -rf"
-alias noh='setopt HIST_IGNORE_SPACE'
 
 grepp(){
 	if [ $# != 1 ]; then
@@ -45,16 +44,6 @@ upgrade(){
 	for i in "${!purges[@]}"; do
 		sudo dpkg --purge ${purges[$i]}
 	done
-}
-
-gmk(){
-	if [ $# != 1 ]; then
-		echo usage: $0 input.go
-		return 1
-	fi
-	dst=`echo $1|sed -e "s/.go/_mock.go/g"`
-	package=`head -n 1 $1|awk '{print $2}'`
-	~/go/bin/mockgen -source $1 -destination ${dst} -package ${package}
 }
 
 getNvidiaInfo(){
