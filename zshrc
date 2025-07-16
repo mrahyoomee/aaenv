@@ -112,12 +112,11 @@ zstyle ':completion:*:functions' ignored-patterns '_*'
 # The next line enables shell command completion for gcloud.
 [[ -f '/home/$USER/google-cloud-sdk/completion.zsh.inc' ]] && source ~/google-cloud-sdk/completion.zsh.inc
 
-[[ -d ~/.local/bin ]] && export PATH="~/.local/bin:$PATH"
-[[ -f ~/.local/bin/local.sh ]] && source ~/.local/bin/local.sh
-[[ -f ~/.local/bin/peco_env.sh ]] && source ~/.local/bin/peco_env.sh
-[[ -f ~/.local/bin/anyenv_path.sh ]] && source ~/.local/bin/anyenv_path.sh
-[[ -f ~/.local/bin/myenv.sh ]] && source ~/.local/bin/myenv.sh
-
+[[ -d $HOME/.local/bin ]] && export PATH=$HOME/.local/bin:$PATH
+[[ -f $HOME/.local/env/local.sh ]] && source $HOME/.local/env/local.sh
+[[ -f $HOME/.local/env/peco_env.sh ]] && source $HOME/.local/env/peco_env.sh
+[[ -f $HOME/.local/env/anyenv_path.sh ]] && source $HOME/.local/env/anyenv_path.sh
+[[ -f $HOME/.local/env/myenv.sh ]] && source $HOME/.local/env/myenv.sh
 #need?
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
