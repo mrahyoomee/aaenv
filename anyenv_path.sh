@@ -1,7 +1,7 @@
 #/usr/bin/env sh
 
 # have anyenv?
-[[ -d $HOME/.anyenv ]] && return
+[[ -d $HOME/.anyenv ]] || return
 
 # add anyenv path
 export PATH="$HOME/.anyenv/bin:$PATH"
