@@ -44,8 +44,7 @@ function peco-cdr () {
     fi
 }
 zle -N peco-cdr
-bindkey '^[' peco-cdr
-
+bindkey '^~' peco-cdr
 
 # git repository ctrl+]
 export SRC_ROOT=~/src
@@ -58,7 +57,7 @@ function peco-src () {
   zle clear-screen
 }
 zle -N peco-src
-bindkey '^]' peco-src
+bindkey '^\' peco-src
 
 # git repository ctrl+\
 export SSH_ROOT=~/src
@@ -71,5 +70,5 @@ function peco-ssh () {
   zle clear-screen
 }
 zle -N peco-ssh
-bindkey '^\' peco-ssh
+bindkey '^]' peco-ssh
 

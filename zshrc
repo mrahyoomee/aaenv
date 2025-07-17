@@ -20,6 +20,10 @@ SHELL=/usr/bin/zsh
 #文字コード設定
 export LANG=ja_JP.UTF-8
 
+# editor
+EDITOR=vim
+VISUAL=vim
+
 #コマンドをtypoしたときに聞きなおしてくれる
 #setopt correct
 

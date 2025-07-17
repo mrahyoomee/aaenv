@@ -21,16 +21,12 @@ zshの初回起動時にテーマの細かい設定を促される。やり直�
 	p10k configure
 
 # pecoとghqの導入
-golangでイン実装されたクリメントサーチできるプログラムで、便利なので入れておく。
+golangで実装されたクリメントサーチできるプログラムで、便利なので入れておく。
+aptで入るバージョンは文字化けするのでマニュアルで入れる。
 
 https://github.com/peco/peco/releases
 
 zshrcで.local/binにパスを設定しているので、バイナリをコピーしておく。
-ghqを使いたいときもここにコピーする。
-
-https://github.com/x-motemen/ghq/releases
-
-後からリポジトリをghqに対応させたい時は
 
 # .bin/localの中
 ディレクトリ自体にパスを通してあるので、何かプログラムにパスを通したい時はここに置く
@@ -41,3 +37,15 @@ https://github.com/x-motemen/ghq/releases
 # zsh起動
 zshを起動して問題なければOK。
 chshでデフォルトシェルを変更しても良い。
+
+# インストールするもの
+
+* 日本語環境
+
+  sudo apt install -y language-pack-ja-base language-pack-ja
+
+* pyenvで入れるpythonのビルド
+
+  sudo apt install -y flex bison byacc make m4 autoconf unzip build-essential python3-dev git g++ wget
+
+
