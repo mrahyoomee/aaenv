@@ -44,7 +44,7 @@ function peco-cdr () {
     fi
 }
 zle -N peco-cdr
-bindkey '^~' peco-cdr
+bindkey '^T' peco-cdr
 
 # git repository ctrl+]
 export SRC_ROOT=~/src

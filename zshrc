@@ -1,3 +1,33 @@
+# タイムスタンプをチェックしてzcompileを実行する関数
+# 引数: コンパイルしたいZshスクリプトファイルのパス
+function ensure_zcompiled {
+  local target_file="$1"
+  local compiled_file="${target_file}.zwc"
+
+  # ファイルが存在しない、または元のファイルがコンパイル済みファイルよりも新しい場合
+  # ! -f "$compiled_file": コンパイル済みファイルが存在しない
+  # "$target_file" -nt "$compiled_file": 元のファイルがコンパイル済みファイルより新しい
+  if [[ ! -f "$compiled_file" || "$target_file" -nt "$compiled_file" ]]; then
+    print "Compiling $target_file..."
+    zcompile "$target_file"
+    # コンパイルエラーが発生した場合に備えて、コンパイルが成功したかチェックすることもできる
+    if [[ $? -ne 0 ]]; then
+      print "Error: zcompile failed for $target_file"
+    fi
+  fi
+}
+
+# 組み込みの 'source' コマンドをオーバーライドするラッパー関数
+# これにより、'source' するすべてのファイルが自動的にコンパイルされるようになる
+function source {
+  # まず、コンパイルが必要かチェックし、必要ならコンパイル
+  ensure_zcompiled "$1"
+
+  # その後、組み込みの 'source' コマンドを実行
+  # 'builtin' キーワードを使って、この関数自身ではなくZshの組み込みコマンドを呼び出す
+  builtin source "$@"
+}
+
 # p10k
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -125,6 +155,4 @@ zstyle ':completion:*:functions' ignored-patterns '_*'
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # .zshrcに変更があった場合、自動的にコンパイル
-if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
-   zcompile ~/.zshrc
-fi
+ensure_zcompiled ~/.zshrc
