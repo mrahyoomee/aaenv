@@ -1,6 +1,7 @@
 #!/bin/bash
 
 alias c='clear'
+#ターミナルが文字化けした時用
 alias q='stty sane'
 alias ts='sudo hwclock -s'
 alias createPassword='pwgen -1 16 10;pwgen -1 -s -y 16 10'
@@ -8,13 +9,28 @@ alias mydate='date +"%Y-%m%d-%H%M%S"'
 alias gip='curl inet-ip.info'
 alias delete1m="find . -maxdepth 1 -mtime +30|xargs rm -rf"
 
-grepp(){
-	if [ $# != 1 ]; then
-		echo usage: $0 string
-		return 1
-	fi
-	grep $1 -rnI
-}
+
+type zoxide  1> /dev/null 2> /dev/null && eval "$(zoxide init zsh)"
+type batcat  1> /dev/null 2> /dev/null && alias bat=batcat
+type batcat  1> /dev/null 2> /dev/null && alias fd=fdfind
+type rg 1> /dev/null 2> /dev/null && alias rg="rg --glob '!*\.P' --glob '!*\.syml' --no-heading"
+type yarnpkg 1> /dev/null 2> /dev/null && PATH="$(yarnpkg global bin):$PATH"
+[[ -d /usr/local/go/bin ]] && export PATH="$PATH:/usr/local/go/bin"
+
+#VS code
+me=$USER
+if [ -f /mnt/c/Windows/System32/cmd.exe ]; then
+  me=`/mnt/c/Windows/System32/cmd.exe "/c" "echo %username%" 2> /dev/null|tr -d '\015'`
+fi
+if [ -d "/mnt/c/Users/$me/AppData/Local/Programs/Microsoft VS Code/bin" ]; then
+  export PATH="/mnt/c/Users/$me/AppData/Local/Programs/Microsoft VS Code/bin":"$PATH"
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+[[ -f '/home/$USER/google-cloud-sdk/path.zsh.inc' ]] &&  source ~/google-cloud-sdk/path.zsh.inc
+
+# The next line enables shell command completion for gcloud.
+[[ -f '/home/$USER/google-cloud-sdk/completion.zsh.inc' ]] && source ~/google-cloud-sdk/completion.zsh.inc
 
 ss(){
 	if [ $# != 1 ]; then
