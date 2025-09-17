@@ -1,35 +1,17 @@
-function ensure_zcompiled {
-  local target_file="$1"
-  local compiled_file="${target_file}.zwc"
-
-  if [[ ! -f "$compiled_file" || "$target_file" -nt "$compiled_file" ]]; then
-    print "Compiling $target_file..."
-    zcompile "$target_file"
-    if [[ $? -ne 0 ]]; then
-      print "Error: zcompile failed for $target_file"
-    fi
-  fi
-}
-
-function source_with_zcompile {
-  ensure_zcompiled "$1"
-  builtin source "$@"
-}
-
-# p10k
+ZSHRC_FILES=()
+# p10k cache
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source_with_zcompile "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  ZSHRC_FILES=(${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh)
 fi
 
-# source_with_zcompile Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source_with_zcompile "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+# source Prezto.
+[[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]] && source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" && ZSHRC_FILES+=(${ZDOTDIR:-$HOME}/.zprezto/init.zsh)
 
 # Customize to your needs...
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source_with_zcompile ~/.p10k.zsh
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh && ZSHRC_FILES+=(${HOME}/.p10k.zsh)
 
 #tmuxinator用
 SHELL=/usr/bin/zsh
@@ -83,12 +65,16 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 zstyle ':completion:*:functions' ignored-patterns '_*'
 
 [[ -d $HOME/.local/bin ]] && export PATH=$HOME/.local/bin:$PATH
-[[ -f $HOME/.local/env/local.sh ]] && source_with_zcompile $HOME/.local/env/local.sh
-[[ -f $HOME/.local/env/peco_env.sh ]] && source_with_zcompile $HOME/.local/env/peco_env.sh
-[[ -f $HOME/.local/env/anyenv_path.sh ]] && source_with_zcompile $HOME/.local/env/anyenv_path.sh
-[[ -f $HOME/.local/env/myenv.sh ]] && source_with_zcompile $HOME/.local/env/myenv.sh
-#need?
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+[[ -f $HOME/.local/env/local.sh ]] && source $HOME/.local/env/local.sh && ZSHRC_FILES+=($HOME/.local/env/local.sh)
+[[ -f $HOME/.local/env/peco_env.sh ]] && source $HOME/.local/env/peco_env.sh && ZSHRC_FILES+=($HOME/.local/env/peco_env.sh)
+[[ -f $HOME/.local/env/anyenv_path.sh ]] && source $HOME/.local/env/anyenv_path.sh && ZSHRC_FILES+=($HOME/.local/env/anyenv_path.sh)
+[[ -f $HOME/.local/env/myenv.sh ]] && source $HOME/.local/env/myenv.sh && ZSHRC_FILES+=($HOME/.local/env/myenv.sh)
 
-# .zshrcに変更があった場合、自動的にコンパイル
-ensure_zcompiled ~/.zshrc
+# どのファイルが更新されたかチェックし、必要なら再コンパイル
+ZSHRC_FILES+=($HOME/.zshrc)
+for file in $ZSHRC_FILES; do
+  if [[ ! -f "${file}.zwc" || "$file" -nt "${file}.zwc" ]]; then
+      echo "Recompiling $file..."
+      zcompile "$file"
+  fi
+done
